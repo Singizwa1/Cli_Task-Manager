@@ -1,4 +1,4 @@
-const fs= reqquire ('fs');
+const fs= require ('fs');
 const yargs=require('yargs');
 const chalk=require('chalk');
 
@@ -71,7 +71,70 @@ yargs.command({
         });
     }
 
+});
+yargs.command({
+    command:'complete',
+    describe:'Mark a task as completed',
+    builder:{
+        id:{
+            describe:'Task Id',
+            demandOption:true,
+            type:'number'
+        }
+    },
+    handler(argv){
+        const tasks= readTasks();
+        const task = tasks.find(task => task.id === argv.id);
+        if(!task){
+            console.log(chalk.red(`Task with ID ${argv.id} not found.`));
+            return;
+        }
+        if(task.completed){
+            console.log(chalk.yellow(`Task with ID ${argv.id} is already completed.`));
+            return;
+        }
+        task.completed = true;
+        SaveTasks(tasks);
+        console.log(chalk.green(`Task with ID ${argv.id} marked as completed.`));
+    }
+});
+yargs.command({
+    command:'remove',
+    describe:'Remove a task',
+    builder:{
+        id:{
+            describe:'Task Id',
+            demandOption:true,
+            type:'number'
+        }
+    },
+
+handler(argv){
+    const tasks =readTasks();
+    const taskIndex = tasks.findIndex(task => task.id === argv.id);
+    if(taskIndex === -1){
+        console.log(chalk.red(`Task with ID ${argv.id} not found.`));
+        return;
+    }
+    const removedTask = tasks.splice(taskIndex, 1)[0];
+    SaveTasks(tasks);
+    console.log(chalk.green(`Task removed: ${removedTask.title}`));
+}
 
 });
+yargs.command({
+    command:'clear',
+    describe:'Clear all tasks',
+    handler(){
+        SaveTasks([]);
+        console.log(chalk.green('All tasks cleared.'));
+    }
+});
 
+
+    yargs
+  .strict()
+  .demandCommand()
+  .help()
+  .parse();
 
