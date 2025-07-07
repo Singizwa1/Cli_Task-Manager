@@ -118,6 +118,40 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
+    'update',
+    'update a task',
+    (yargs) =>
+      yargs
+        .option('id', {
+          describe: 'Task Id',
+          demandOption: true,
+          type: 'number',
+        })
+        .option('title', {
+          describe: 'New task title',
+          demandOption: false,
+          type: 'string',
+        })
+        .option('description', {
+          describe: 'New task description',
+          demandOption: false,
+          type: 'string',
+        }),
+    (argv) => {
+      const tasks = readTasks();
+      const task = tasks.find((t) => t.id === argv.id);
+      if (!task) {
+        console.log(chalk.red(`Task with ID ${argv.id} not found.`));
+        return;
+      }
+      if (argv.title) task.title = argv.title;
+      if (argv.description) task.description = argv.description;
+      saveTasks(tasks);
+      console.log(chalk.green(`Task with ID ${argv.id} updated.`));
+    }
+
+  )
+  .command(
     'clear',
     'Clear all tasks',
     () => {},
