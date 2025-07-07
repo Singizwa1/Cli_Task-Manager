@@ -1,6 +1,6 @@
 # 📝 CLI Task Manager
 
-A simple, interactive Command Line Interface (CLI) task manager built with *Node.js*, *Yargs*, and *Chalk*. It allows users to perform *CRUD operations* (Create, Read, Update, Delete) on tasks directly from the terminal.
+A simple, interactive Command Line Interface (CLI) task manager built with **Node.js**, **Yargs**, and **Chalk**. It allows users to perform **CRUD operations** (Create, Read, Update, Delete) on tasks directly from the terminal.
 
 ---
 
