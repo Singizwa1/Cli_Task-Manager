@@ -1,7 +1,5 @@
-// index.js (or cli.js)
-
 import fs from 'fs';
-import yargs from 'yargs';
+import yargs  from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import chalk from 'chalk';
 
@@ -46,6 +44,8 @@ yargs(hideBin(process.argv))
         title: argv.title,
         description: argv.description || '',
         completed: false,
+        startedAt: new Date().toISOString(),
+        completedAt: null,
       };
       tasks.push(newTask);
       saveTasks(tasks);
@@ -63,12 +63,23 @@ yargs(hideBin(process.argv))
         return;
       }
       console.log(chalk.blue.bold('\n Task List:\n'));
-      tasks.forEach((task) => {
-        const status = task.completed ? chalk.green('✔') : chalk.red('✘');
-        console.log(
-          `${status} ${chalk.cyan(task.id)}: ${chalk.white(task.title)} - ${chalk.gray(task.description)}`
-        );
-      });
+     tasks.forEach((task) => {
+  const status = task.completed ? chalk.green('✔') : chalk.red('✘');
+  const start = new Date(task.startAt).toLocaleString();
+  const completed = task.completedDate
+    ? `✅ Completed: ${new Date(task.completedDate).toLocaleString()}`
+    : '';
+
+  console.log(
+    `${status} ${chalk.cyan(task.id)}: ${chalk.white(task.title)} - ${chalk.gray(task.description)}`
+  );
+  console.log(chalk.gray(`📅 Started: ${start}`));
+  if (completed) {
+    console.log(chalk.gray(completed));
+  }
+  console.log(); 
+});
+
     }
   )
   .command(
@@ -92,6 +103,7 @@ yargs(hideBin(process.argv))
         return;
       }
       task.completed = true;
+      task.completedAt = new Date().toISOString();
       saveTasks(tasks);
       console.log(chalk.green(`Task with ID ${argv.id} marked as completed.`));
     }
@@ -146,6 +158,11 @@ yargs(hideBin(process.argv))
       }
       if (argv.title) task.title = argv.title;
       if (argv.description) task.description = argv.description;
+        if (!task.startedAt) {
+      task.startedAt = new Date().toISOString();
+    }
+
+    task.updatedAt = new Date().toISOString();
       saveTasks(tasks);
       console.log(chalk.green(`Task with ID ${argv.id} updated.`));
     }
@@ -160,6 +177,7 @@ yargs(hideBin(process.argv))
       console.log(chalk.green('All tasks cleared.'));
     }
   )
+
   .strict()
   .demandCommand()
   .help()

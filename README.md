@@ -6,9 +6,9 @@ A simple, interactive Command Line Interface (CLI) task manager built with **Nod
 
 ## 🚀 Features
 
-- ✅ Add new tasks with title and optional description
+- ✅ Add new tasks with title and optional description by "node --title "tittle" --description "description"
 - 📋 List all saved tasks
-- ✅ Mark tasks as completed
+- ✅ Mark tasks as completed test by "node index.js complete --id=number"
 - ❌ Remove tasks by ID
 - 🧹 Clear all tasks
 - 🧠 Stores tasks in a local `tasks.json` file
